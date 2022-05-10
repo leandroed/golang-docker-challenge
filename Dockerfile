@@ -1,10 +1,9 @@
 FROM golang:1.12.0-alpine3.9 AS builder
-RUN mkdir /app
-COPY . /app
 WORKDIR /app
-RUN go build -o main .
+COPY . /app
+RUN go build -o ./dist/main
 
 FROM scratch
-WORKDIR /app
-COPY --from=builder /app .
-CMD ["/app/main"]
+WORKDIR /
+COPY --from=builder /app/dist/main /main
+ENTRYPOINT ["/main"]
